@@ -47,6 +47,8 @@ public class XUIClient extends XWalkUIClient{
                     break;
             }
         }
+        //强制不能返回，清除历史记录
+        view.getNavigationHistory().clear();
 
     }
 
