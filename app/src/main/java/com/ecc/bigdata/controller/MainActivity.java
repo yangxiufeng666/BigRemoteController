@@ -1,22 +1,28 @@
 package com.ecc.bigdata.controller;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.webkit.WebResourceResponse;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import org.xwalk.core.XWalkJavascriptResult;
+import com.ecc.bigdata.controller.conf.XResourceClient;
+import com.ecc.bigdata.controller.conf.XUIClient;
+import com.ecc.bigdata.controller.listener.LoadPagerListener;
+import com.ecc.bigdata.controller.util.Utils;
+
 import org.xwalk.core.XWalkPreferences;
-import org.xwalk.core.XWalkResourceClient;
 import org.xwalk.core.XWalkSettings;
-import org.xwalk.core.XWalkUIClient;
 import org.xwalk.core.XWalkView;
-import org.xwalk.core.XWalkWebResourceRequest;
-import org.xwalk.core.XWalkWebResourceResponse;
 import org.xwalk.core.internal.XWalkSettingsInternal;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -24,6 +30,16 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.xWalkView)
     XWalkView xWalkView;
     XWalkSettings mSettings;
+
+    @BindView(R.id.loadingLayout)
+    RelativeLayout loadingLayout;
+    @BindView(R.id.btn_retry)
+    TextView btnRetry;
+    @BindView(R.id.loadFail)
+    LinearLayout loadFailLayout;
+    private boolean isError;
+    private long exitTime;
+    XLoadPagerListener loadPagerListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,71 +50,28 @@ public class MainActivity extends AppCompatActivity {
         initWalkView();
         setWalkView();
     }
-    private void initEnv(){
+
+    private void initEnv() {
         try {
-            if (Integer.parseInt(android.os.Build.VERSION.SDK) >= 11) {
+            if (Integer.parseInt(Build.VERSION.SDK) >= 11) {
                 getWindow()
                         .setFlags(
-                                android.view.WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
-                                android.view.WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
+                                WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
+                                WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     private void setWalkView() {
-        xWalkView.setUIClient(new XWalkUIClient(xWalkView){
-            @Override
-            public void onPageLoadStopped(XWalkView view, String url, LoadStatus status) {
-                super.onPageLoadStopped(view, url, status);
-            }
-
-            @Override
-            public void onPageLoadStarted(XWalkView view, String url) {
-                super.onPageLoadStarted(view, url);
-            }
-
-            @Override
-            public boolean onJsAlert(XWalkView view, String url, String message, XWalkJavascriptResult result) {
-                return super.onJsAlert(view, url, message, result);
-            }
-
-            @Override
-            public boolean onJsConfirm(XWalkView view, String url, String message, XWalkJavascriptResult result) {
-                return super.onJsConfirm(view, url, message, result);
-            }
-
-            @Override
-            public boolean onJsPrompt(XWalkView view, String url, String message, String defaultValue, XWalkJavascriptResult result) {
-                return super.onJsPrompt(view, url, message, defaultValue, result);
-            }
-        });
-        xWalkView.setResourceClient(new XWalkResourceClient(xWalkView){
-            @Override
-            public XWalkWebResourceResponse shouldInterceptLoadRequest(XWalkView view, XWalkWebResourceRequest request) {
-                Log.e("WWalk","resource url = "+request.getUrl().toString());
-                return super.shouldInterceptLoadRequest(view, request);
-            }
-
-            @Override
-            public WebResourceResponse shouldInterceptLoadRequest(XWalkView view, String url) {
-                return super.shouldInterceptLoadRequest(view, url);
-            }
-
-            @Override
-            public void onLoadStarted(XWalkView view, String url) {
-                super.onLoadStarted(view, url);
-            }
-
-            @Override
-            public void onLoadFinished(XWalkView view, String url) {
-                super.onLoadFinished(view, url);
-            }
-        });
+        loadPagerListener = new XLoadPagerListener();
+        xWalkView.setUIClient(new XUIClient(xWalkView, loadPagerListener));
+        xWalkView.setResourceClient(new XResourceClient(xWalkView,loadPagerListener));
     }
 
     private void initWalkView() {
-        xWalkView.loadUrl("http://58.16.67.76:9003/screen/goScreen");
+        xWalkView.loadUrl(Utils.URL_PAD);
         xWalkView.setDrawingCacheEnabled(true);
         //获取setting
         mSettings = xWalkView.getSettings();
@@ -107,8 +80,7 @@ public class MainActivity extends AppCompatActivity {
         mSettings.setBuiltInZoomControls(false);
         mSettings.setSupportZoom(false);
         mSettings.setDomStorageEnabled(true);
-        mSettings.setJavaScriptEnabled(true);
-        mSettings.setCacheMode(XWalkSettingsInternal.LOAD_NO_CACHE);
+        mSettings.setCacheMode(XWalkSettingsInternal.LOAD_DEFAULT);
         mSettings.setUseWideViewPort(true);
         mSettings.setLoadWithOverviewMode(true);
 
@@ -120,8 +92,6 @@ public class MainActivity extends AppCompatActivity {
         XWalkPreferences.setValue(XWalkPreferences.ALLOW_UNIVERSAL_ACCESS_FROM_FILE, true);
         //JAVASCRIPT_CAN_OPEN_WINDOW
         XWalkPreferences.setValue(XWalkPreferences.JAVASCRIPT_CAN_OPEN_WINDOW, true);
-        // enable multiple windows.
-        XWalkPreferences.setValue(XWalkPreferences.SUPPORT_MULTIPLE_WINDOWS, true);
     }
 
     @Override
@@ -144,9 +114,50 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        if (xWalkView != null){
+        if (xWalkView != null) {
             xWalkView.onDestroy();
         }
         super.onDestroy();
+    }
+
+    @OnClick(R.id.btn_retry)
+    public void onClick() {
+        loadPagerListener.setLoadOkFlag(true);
+        xWalkView.reload(XWalkView.RELOAD_IGNORE_CACHE);
+    }
+
+    @Override
+    public void onBackPressed() {
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - exitTime > 2000){
+            Toast.makeText(this,"再按一次退出程序",Toast.LENGTH_SHORT).show();
+            exitTime = currentTime;
+            return;
+        }
+        super.onBackPressed();
+    }
+    class XLoadPagerListener extends LoadPagerListener{
+        @Override
+        public void onPageStarted() {
+            loadFailLayout.setVisibility(View.GONE);
+            loadingLayout.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void onPageFinished() {
+            if (!getLoadOkFlag()){
+                loadingLayout.setVisibility(View.GONE);
+                loadFailLayout.setVisibility(View.VISIBLE);
+            }else {
+                loadFailLayout.setVisibility(View.GONE);
+                loadingLayout.setVisibility(View.GONE);
+            }
+        }
+
+        @Override
+        public void onReceivedError() {
+            loadingLayout.setVisibility(View.GONE);
+            loadFailLayout.setVisibility(View.VISIBLE);
+        }
     }
 }
