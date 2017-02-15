@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initWalkView() {
-        xWalkView.loadUrl(Utils.URL_PAD);
+        xWalkView.loadUrl(getResources().getString(R.string.api_url));
         xWalkView.setDrawingCacheEnabled(true);
         //获取setting
         mSettings = xWalkView.getSettings();

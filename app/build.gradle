@@ -2,6 +2,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.jakewharton.butterknife'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'ecc-alias'
+            keyPassword '@hh125469'
+            storeFile file('D:/android_env/ecc.jks')
+            storePassword '@hh125469'
+        }
+    }
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
     defaultConfig {
@@ -11,17 +19,54 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.config
+        resValue("string","api_url","http://58.16.67.76:9003")
+        manifestPlaceholders = [
+                    app_name:"彩云遥控器"
+            ]
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+            zipAlignEnabled true
         }
+        debug {
+            signingConfig signingConfigs.config
+            zipAlignEnabled true
+        }
+    }
+    productFlavors {
+//        controller_config {
+//            minSdkVersion 19
+//            applicationId 'com.ecc.bigdata.remote'
+//            signingConfig signingConfigs.config
+//            targetSdkVersion 25
+//            versionCode 1
+//            versionName '1.0'
+//            manifestPlaceholders = [
+//                    app_name:"彩云遥控器"
+//            ]
+//            resValue("string","api_url","http://58.16.67.76:9003")
+//        }
+//        TV_config {
+//            minSdkVersion 19
+//            applicationId 'com.ecc.bigdata.tv'
+//            signingConfig signingConfigs.config
+//            targetSdkVersion 25
+//            versionCode 1
+//            versionName '1.0'
+//            manifestPlaceholders = [
+//                    app_name:"彩云系统"
+//            ]
+//            resValue("string","api_url","http://58.16.67.76:9003/screen/goScreen")
+//        }
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
