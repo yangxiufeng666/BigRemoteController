@@ -20,10 +20,14 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.config
-        resValue("string","api_url","http://58.16.67.76:9003")
+        resValue("string","api_url","http://58.16.65.206:9003")
+        resValue("string","welcome_content","欢迎使用彩云遥控器")
         manifestPlaceholders = [
                     app_name:"彩云遥控器"
             ]
+        ndk{
+            abiFilters "armeabi-v7a","armeabi"
+        }
     }
     buildTypes {
         release {
@@ -48,7 +52,11 @@ android {
             manifestPlaceholders = [
                     app_name:"彩云遥控器"
             ]
-            resValue("string","api_url","http://58.16.67.76:9003")
+            resValue("string","api_url","http://58.16.65.206:9003")
+            resValue("string","welcome_content","欢迎使用彩云遥控器")
+            ndk{
+                abiFilters "armeabi-v7a","armeabi"
+            }
         }
         TV_config {
             minSdkVersion 19
@@ -60,7 +68,11 @@ android {
             manifestPlaceholders = [
                     app_name:"彩云系统"
             ]
-            resValue("string","api_url","http://58.16.67.76:9003/screen/goScreen")
+            resValue("string","api_url","http://58.16.65.206:9003/screen/goScreen")
+            resValue("string","welcome_content","欢迎使用彩云系统")
+            ndk{
+                abiFilters "armeabi-v7a","armeabi"
+            }
         }
     }
 }
