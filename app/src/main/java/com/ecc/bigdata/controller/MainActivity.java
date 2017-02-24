@@ -13,7 +13,6 @@ import android.widget.Toast;
 import com.ecc.bigdata.controller.conf.XResourceClient;
 import com.ecc.bigdata.controller.conf.XUIClient;
 import com.ecc.bigdata.controller.listener.LoadPagerListener;
-import com.ecc.bigdata.controller.util.Utils;
 
 import org.xwalk.core.XWalkPreferences;
 import org.xwalk.core.XWalkSettings;
@@ -83,6 +82,9 @@ public class MainActivity extends AppCompatActivity {
         mSettings.setCacheMode(XWalkSettingsInternal.LOAD_DEFAULT);
         mSettings.setUseWideViewPort(true);
         mSettings.setLoadWithOverviewMode(true);
+        mSettings.setSupportSpatialNavigation(false);
+        mSettings.setSupportMultipleWindows(false);
+        mSettings.setSupportQuirksMode(false);
 
         //添加对javascript支持
         XWalkPreferences.setValue("enable-javascript", true);

@@ -88,4 +88,5 @@ dependencies {
     compile 'pub.devrel:easypermissions:0.3.0'
     compile 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+    compile 'com.airbnb.android:lottie:1.5.0'
 }

@@ -1,6 +1,9 @@
 package com.ecc.bigdata.controller;
 
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.TimeInterpolator;
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,8 +11,14 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.airbnb.lottie.LottieAnimationView;
 
 import java.util.Arrays;
 import java.util.List;
@@ -41,6 +50,8 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
     };
     @BindView(R.id.welcomeTxt)
     TextView welcomeTxt;
+    @BindView(R.id.lottieView)
+    LottieAnimationView lottieView;
 
     private Handler handler = new Handler() {
         @Override
@@ -111,14 +122,35 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
     }
 
     private void delayToMainActivity() {
-        handler.postDelayed(new Runnable() {
+        final Animation anim = new AlphaAnimation(0,1);
+        anim.setDuration(3000);
+        anim.setFillAfter(true);
+        anim.setInterpolator(new LinearInterpolator());
+        welcomeTxt.startAnimation(anim);
+        lottieView.playAnimation();
+        lottieView.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
-            public void run() {
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
                 Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             }
-        }, 3000);
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
     }
 
     @Override
