@@ -49,8 +49,8 @@ public class XResourceClient extends XWalkResourceClient {
     @Override
     public void onReceivedLoadError(XWalkView view, int errorCode, String description, String failingUrl) {
         Log.e("XResourceClient","onReceivedLoadError = "+description+",,,,"+failingUrl+",");
-        super.onReceivedLoadError(view, errorCode, description, failingUrl);
-        if (loadPagerListener != null && failingUrl.equals(Utils.URL)){
+//        super.onReceivedLoadError(view, errorCode, description, failingUrl);
+        if (loadPagerListener != null){
             loadPagerListener.setLoadOkFlag(false);
             loadPagerListener.onReceivedError();
         }

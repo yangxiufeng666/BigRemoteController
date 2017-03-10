@@ -3,6 +3,7 @@ package com.ecc.bigdata.controller;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -47,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         initEnv();
         initWalkView();
-        setWalkView();
     }
 
     private void initEnv() {
@@ -63,14 +63,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void setWalkView() {
+    private void initWalkView() {
         loadPagerListener = new XLoadPagerListener();
         xWalkView.setUIClient(new XUIClient(xWalkView, loadPagerListener));
         xWalkView.setResourceClient(new XResourceClient(xWalkView,loadPagerListener));
-    }
 
-    private void initWalkView() {
-        xWalkView.loadUrl(getResources().getString(R.string.api_url));
         xWalkView.setDrawingCacheEnabled(true);
         //获取setting
         mSettings = xWalkView.getSettings();
@@ -94,6 +91,9 @@ public class MainActivity extends AppCompatActivity {
         XWalkPreferences.setValue(XWalkPreferences.ALLOW_UNIVERSAL_ACCESS_FROM_FILE, true);
         //JAVASCRIPT_CAN_OPEN_WINDOW
         XWalkPreferences.setValue(XWalkPreferences.JAVASCRIPT_CAN_OPEN_WINDOW, true);
+
+        //load url
+        xWalkView.loadUrl(getResources().getString(R.string.api_url));
     }
 
     @Override
@@ -147,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onPageFinished() {
+            Log.e("onPageFinished","etLoadOkFlag()="+getLoadOkFlag());
             if (!getLoadOkFlag()){
                 loadingLayout.setVisibility(View.GONE);
                 loadFailLayout.setVisibility(View.VISIBLE);

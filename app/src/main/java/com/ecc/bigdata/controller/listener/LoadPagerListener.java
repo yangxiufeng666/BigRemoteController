@@ -11,9 +11,9 @@ public abstract class LoadPagerListener {
     public abstract void onPageFinished();
     public abstract void onReceivedError();
 
-    boolean loadOkFlag = true;
+    private volatile boolean loadOkFlag = true;
 
-    public boolean getLoadOkFlag() {
+    protected boolean getLoadOkFlag() {
         return loadOkFlag;
     }
 
