@@ -82,15 +82,9 @@ public class MainActivity extends AppCompatActivity {
         mSettings.setSupportSpatialNavigation(false);
         mSettings.setSupportMultipleWindows(false);
         mSettings.setSupportQuirksMode(false);
-
-        //添加对javascript支持
-        XWalkPreferences.setValue("enable-javascript", true);
-        //开启调式,支持谷歌浏览器调式
-        XWalkPreferences.setValue(XWalkPreferences.REMOTE_DEBUGGING, true);
-        //置是否允许通过file url加载的Javascript可以访问其他的源,包括其他的文件和http,https等其他的源
-        XWalkPreferences.setValue(XWalkPreferences.ALLOW_UNIVERSAL_ACCESS_FROM_FILE, true);
-        //JAVASCRIPT_CAN_OPEN_WINDOW
-        XWalkPreferences.setValue(XWalkPreferences.JAVASCRIPT_CAN_OPEN_WINDOW, true);
+        mSettings.setAllowFileAccessFromFileURLs(true);
+        mSettings.setAllowUniversalAccessFromFileURLs(true);
+        mSettings.setAllowFileAccess(true);
 
         //load url
         xWalkView.loadUrl(getResources().getString(R.string.api_url));
