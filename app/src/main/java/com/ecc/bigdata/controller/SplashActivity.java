@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -15,13 +17,27 @@ import android.view.animation.LinearInterpolator;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.airbnb.lottie.LottieAnimationView;
+import com.ecc.bigdata.controller.entity.ResultBean;
+import com.ecc.bigdata.controller.util.OKHttpUtil;
+import com.ecc.bigdata.controller.util.Utils;
+import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -50,6 +66,10 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
     @BindView(R.id.lottieView)
     LottieAnimationView lottieView;
 
+    CountDownLatch countDownLatch;
+
+    volatile boolean isReported;
+
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -63,6 +83,7 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
         setContentView(R.layout.activity_splash_layout);
         ButterKnife.bind(this);
         welcomeTxt.setText(getString(R.string.welcome_content));
+        countDownLatch = new CountDownLatch(1);
         if (EasyPermissions.hasPermissions(this, needPermissions)) {
             Log.e(TAG, "已经获取权限");
             delayToMainActivity();
@@ -119,7 +140,8 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
     }
 
     private void delayToMainActivity() {
-        final Animation anim = new AlphaAnimation(0,1);
+        checkDeviceReport();
+        final Animation anim = new AlphaAnimation(0, 1);
         anim.setDuration(3000);
         anim.setFillAfter(true);
         anim.setInterpolator(new LinearInterpolator());
@@ -133,9 +155,12 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                try {
+                    countDownLatch.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                handler.post(runnable);
             }
 
             @Override
@@ -150,6 +175,84 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
         });
     }
 
+    private void checkDeviceReport() {
+        OkHttpClient okHttpClient = OKHttpUtil.getmInstance().getOKhttpClient();
+        Request.Builder builder = new Request.Builder();
+        builder.url("http://58.16.65.206:9007/report/checkReportDevice");
+        builder.post(new FormBody.Builder()
+                .add("imei", Utils.getIMEI(SplashActivity.this))
+                .build());
+        Call call = okHttpClient.newCall(builder.build());
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        error();
+                        countDownLatch.countDown();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Gson gson = new Gson();
+                ResultBean resultBean = gson.fromJson(response.body().string(), ResultBean.class);
+                if (resultBean==null){
+                    isReported = false;
+                }else {
+                    if (resultBean.getCode()==40000){//已经上报过了
+                        isReported = true;
+                    }else{
+                        isReported = false;
+                    }
+                }
+                countDownLatch.countDown();
+            }
+        });
+    }
+    private void error(){
+        handler.removeCallbacks(runnable);
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(SplashActivity.this);
+        builder.content("网络连接失败，请检查您的网络");
+        builder.title("温馨提示");
+        builder.positiveText("退出应用");
+        builder.negativeText("设置网络");
+        builder.onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                SplashActivity.this.finish();
+            }
+        });
+        builder.onNegative(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                Intent intent =  new Intent(Settings.ACTION_WIFI_SETTINGS);
+                startActivity(intent);
+                SplashActivity.this.finish();
+                System.exit(0);
+            }
+        });
+        MaterialDialog dialog = builder.build();
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            Intent intent;
+            if (isReported){
+                intent = new Intent(SplashActivity.this, MainActivity.class);
+            }else{
+                intent = new Intent(SplashActivity.this, ReportActivity.class);
+            }
+            startActivity(intent);
+            finish();
+        }
+    };
     @Override
     public void onBackPressed() {
         //屏蔽返回键
