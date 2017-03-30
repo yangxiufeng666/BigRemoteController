@@ -69,6 +69,7 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
     CountDownLatch countDownLatch;
 
     volatile boolean isReported;
+    volatile boolean isError;
 
     private Handler handler = new Handler() {
         @Override
@@ -160,7 +161,9 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                handler.post(runnable);
+                if (!isError){
+                    handler.post(runnable);
+                }
             }
 
             @Override
@@ -191,6 +194,7 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
                     @Override
                     public void run() {
                         error();
+                        isError = true;
                         countDownLatch.countDown();
                     }
                 });

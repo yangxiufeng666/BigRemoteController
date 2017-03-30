@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ecc.bigdata.controller.bridge.JSserver;
 import com.ecc.bigdata.controller.conf.XResourceClient;
 import com.ecc.bigdata.controller.conf.XUIClient;
 import com.ecc.bigdata.controller.listener.LoadPagerListener;
@@ -86,8 +87,10 @@ public class MainActivity extends AppCompatActivity {
         mSettings.setAllowUniversalAccessFromFileURLs(true);
         mSettings.setAllowFileAccess(true);
 
+        xWalkView.addJavascriptInterface(new JSserver(this.getApplication().getApplicationContext()),"NativeInterface");
         //load url
-        xWalkView.loadUrl(getResources().getString(R.string.api_url));
+//        xWalkView.loadUrl(getResources().getString(R.string.api_url));
+        xWalkView.loadUrl("file:///android_asset/testJs.html");
     }
 
     @Override

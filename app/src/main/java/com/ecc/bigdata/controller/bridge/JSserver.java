@@ -1,6 +1,10 @@
 package com.ecc.bigdata.controller.bridge;
 
-import android.app.Activity;
+import android.content.Context;
+
+import com.ecc.bigdata.controller.util.Utils;
+
+import org.xwalk.core.JavascriptInterface;
 
 /**
  * Created by Mr.Yangxiufeng
@@ -9,9 +13,13 @@ import android.app.Activity;
  */
 
 public class JSserver {
-    private Activity activity;
+    private Context context;
 
-    public JSserver(Activity activity) {
-        this.activity = activity;
+    public JSserver(Context context) {
+        this.context = context;
+    }
+    @JavascriptInterface
+    public String getImei(){
+        return Utils.getIMEI(context);
     }
 }
