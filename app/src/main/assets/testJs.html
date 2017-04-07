@@ -7,9 +7,17 @@
 			function clicked() {
     			alert(NativeInterface.getImei());
 			}
+			function qrScan() {
+    			NativeInterface.qrScan();
+			}
+			function show(content){
+			    alert(content);
+			}
 		</script>
 	</head>
 	<body>
-		<a href="#" onclick="clicked()">点我点我</a>
+		<a href="#" onclick="clicked()">获取IMEI</a>
+		<p/>
+		<a href="#" onclick="qrScan()">调用摄像头</a>
 	</body>
 </html>

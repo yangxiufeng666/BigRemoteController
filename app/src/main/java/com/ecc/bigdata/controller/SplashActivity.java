@@ -59,7 +59,9 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
             Manifest.permission.ACCESS_WIFI_STATE,
             Manifest.permission.ACCESS_NETWORK_STATE,
             Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.INTERNET
+            Manifest.permission.INTERNET,
+            Manifest.permission.CAMERA,
+            Manifest.permission.VIBRATE
     };
     @BindView(R.id.welcomeTxt)
     TextView welcomeTxt;

@@ -1,5 +1,6 @@
 package com.ecc.bigdata.controller;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,8 +16,8 @@ import com.ecc.bigdata.controller.bridge.JSserver;
 import com.ecc.bigdata.controller.conf.XResourceClient;
 import com.ecc.bigdata.controller.conf.XUIClient;
 import com.ecc.bigdata.controller.listener.LoadPagerListener;
+import com.orhanobut.logger.Logger;
 
-import org.xwalk.core.XWalkPreferences;
 import org.xwalk.core.XWalkSettings;
 import org.xwalk.core.XWalkView;
 import org.xwalk.core.internal.XWalkSettingsInternal;
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     TextView btnRetry;
     @BindView(R.id.loadFail)
     LinearLayout loadFailLayout;
+    @BindView(R.id.activity_main)
+    RelativeLayout activityMain;
     private boolean isError;
     private long exitTime;
     XLoadPagerListener loadPagerListener;
@@ -67,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     private void initWalkView() {
         loadPagerListener = new XLoadPagerListener();
         xWalkView.setUIClient(new XUIClient(xWalkView, loadPagerListener));
-        xWalkView.setResourceClient(new XResourceClient(xWalkView,loadPagerListener));
+        xWalkView.setResourceClient(new XResourceClient(xWalkView, loadPagerListener));
 
         xWalkView.setDrawingCacheEnabled(true);
         //获取setting
@@ -87,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         mSettings.setAllowUniversalAccessFromFileURLs(true);
         mSettings.setAllowFileAccess(true);
 
-        xWalkView.addJavascriptInterface(new JSserver(this.getApplication().getApplicationContext()),"NativeInterface");
+        xWalkView.addJavascriptInterface(new JSserver(this), "NativeInterface");
         //load url
 //        xWalkView.loadUrl(getResources().getString(R.string.api_url));
         xWalkView.loadUrl("file:///android_asset/testJs.html");
@@ -128,14 +131,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         long currentTime = System.currentTimeMillis();
-        if (currentTime - exitTime > 2000){
-            Toast.makeText(this,"再按一次退出程序",Toast.LENGTH_SHORT).show();
+        if (currentTime - exitTime > 2000) {
+            Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
             exitTime = currentTime;
             return;
         }
         super.onBackPressed();
     }
-    class XLoadPagerListener extends LoadPagerListener{
+
+    class XLoadPagerListener extends LoadPagerListener {
         @Override
         public void onPageStarted() {
             loadFailLayout.setVisibility(View.GONE);
@@ -144,11 +148,11 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onPageFinished() {
-            Log.e("onPageFinished","etLoadOkFlag()="+getLoadOkFlag());
-            if (!getLoadOkFlag()){
+            Log.e("onPageFinished", "etLoadOkFlag()=" + getLoadOkFlag());
+            if (!getLoadOkFlag()) {
                 loadingLayout.setVisibility(View.GONE);
                 loadFailLayout.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 loadFailLayout.setVisibility(View.GONE);
                 loadingLayout.setVisibility(View.GONE);
             }
@@ -158,6 +162,24 @@ public class MainActivity extends AppCompatActivity {
         public void onReceivedError() {
             loadingLayout.setVisibility(View.GONE);
             loadFailLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Logger.e("resultCode="+resultCode);
+        if (requestCode == JSserver.QR_SCAN_CODE){
+            String result = data.getStringExtra("result");
+            /**
+             * {
+             "token": "123456789",
+             "imei": "234555"
+             }
+             */
+            Logger.e("result="+result);
+            //调用JS，把信息给页面
+            xWalkView.loadUrl("javascript:show('"+result+"')");
         }
     }
 }

@@ -8,8 +8,13 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
     <application
         xmlns:tools="http://schemas.android.com/tools"
+        android:name=".BigdataApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="${app_name}"
@@ -32,6 +37,10 @@
             />
         <activity android:name=".ReportActivity"
             android:screenOrientation="landscape"
+            android:configChanges="orientation|keyboardHidden"
+            />
+        <activity android:name=".QRActivity"
+            android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden"
             />
     </application>
