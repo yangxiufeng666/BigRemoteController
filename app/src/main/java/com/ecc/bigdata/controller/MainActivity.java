@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Logger.e("resultCode="+resultCode);
-        if (requestCode == JSserver.QR_SCAN_CODE){
+        if (resultCode == JSserver.QR_SCAN_CODE){
             String result = data.getStringExtra("result");
             /**
              * {
