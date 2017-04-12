@@ -102,6 +102,19 @@ public class QRActivity extends AppCompatActivity implements QRCodeView.Delegate
     @Override
     public void onScanQRCodeOpenCameraError() {
         Log.e(TAG, "打开相机出错");
+        new MaterialDialog.Builder(QRActivity.this)
+                .title("Hi~")
+                .content("打开相机出错")
+                .positiveText("返回")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        finish();
+                    }
+                })
+                .cancelable(false)
+                .canceledOnTouchOutside(false)
+                .show();
     }
     private void vibrate() {
         Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);

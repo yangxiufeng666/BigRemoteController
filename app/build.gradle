@@ -53,6 +53,7 @@ android {
                     app_name:"彩云遥控器"
             ]
             resValue("string","api_url","http://58.16.65.206:9007")
+            resValue("string","domain_url","http://58.16.65.206:9007")
             resValue("string","welcome_content","欢迎使用彩云遥控器")
             resValue("string","deviceType","1")
             ndk{
@@ -70,6 +71,7 @@ android {
                     app_name:"彩云系统"
             ]
             resValue("string","api_url","http://show.bigdata.gogbuy.com/screen/goScreen")
+            resValue("string","domain_url","http://58.16.65.206:9007")
             resValue("string","welcome_content","欢迎使用彩云系统")
             resValue("string","deviceType","2")
             ndk{

@@ -61,7 +61,7 @@ public class ReportActivity extends AppCompatActivity {
         showWaitDialog();
         OkHttpClient okHttpClient = OKHttpUtil.getmInstance().getOKhttpClient();
         Request.Builder builder = new Request.Builder();
-        builder.url("http://58.16.65.206:9007/report/device");
+        builder.url(getResources().getString(R.string.domain_url)+"/report/device");
         builder.post(new FormBody.Builder()
                 .add("imei", Utils.getIMEI(ReportActivity.this))
                 .add("deviceType",getString(R.string.deviceType))

@@ -92,8 +92,8 @@ public class MainActivity extends AppCompatActivity {
 
         xWalkView.addJavascriptInterface(new JSserver(this), "NativeInterface");
         //load url
-//        xWalkView.loadUrl(getResources().getString(R.string.api_url));
-        xWalkView.loadUrl("file:///android_asset/testJs.html");
+        xWalkView.loadUrl(getResources().getString(R.string.api_url));
+//        xWalkView.loadUrl("file:///android_asset/testJs.html");
     }
 
     @Override
