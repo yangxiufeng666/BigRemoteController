@@ -92,7 +92,11 @@ public class MainActivity extends AppCompatActivity {
 
         xWalkView.addJavascriptInterface(new JSserver(this), "NativeInterface");
         //load url
-        xWalkView.loadUrl(getResources().getString(R.string.api_url));
+        if ("1".equals(getResources().getString(R.string.deviceType))){
+            xWalkView.loadUrl(getResources().getString(R.string.domain_url));
+        }else {
+            xWalkView.loadUrl(getResources().getString(R.string.domain_url)+"/screen/goScreen");
+        }
 //        xWalkView.loadUrl("file:///android_asset/testJs.html");
     }
 
