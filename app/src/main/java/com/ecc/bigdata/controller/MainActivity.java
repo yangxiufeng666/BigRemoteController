@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         mSettings.setAllowFileAccessFromFileURLs(true);
         mSettings.setAllowUniversalAccessFromFileURLs(true);
         mSettings.setAllowFileAccess(true);
+        mSettings.setDatabaseEnabled(true);
 
         xWalkView.addJavascriptInterface(new JSserver(this), "NativeInterface");
         //load url

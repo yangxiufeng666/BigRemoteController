@@ -3,6 +3,7 @@ package com.ecc.bigdata.controller;
 import android.Manifest;
 import android.animation.Animator;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -181,11 +182,14 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
     }
 
     private void checkDeviceReport() {
+        Log.e("XXX", Build.BRAND);
+        Log.e("XXX", Build.MODEL);
         OkHttpClient okHttpClient = OKHttpUtil.getmInstance().getOKhttpClient();
         Request.Builder builder = new Request.Builder();
         builder.url(getResources().getString(R.string.domain_url)+"/report/checkReportDevice");
         builder.post(new FormBody.Builder()
                 .add("imei", Utils.getIMEI(SplashActivity.this))
+                .add("deviceName",Build.BRAND+"("+Build.MODEL+")")
                 .build());
         Call call = okHttpClient.newCall(builder.build());
         call.enqueue(new Callback() {
