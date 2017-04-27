@@ -3,8 +3,10 @@ package com.ecc.bigdata.controller.bridge;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 
 import com.ecc.bigdata.controller.QRActivity;
+import com.ecc.bigdata.controller.R;
 import com.ecc.bigdata.controller.util.Utils;
 
 import org.xwalk.core.JavascriptInterface;
@@ -25,6 +27,14 @@ public class JSserver {
     @JavascriptInterface
     public String getImei(){
         return Utils.getIMEI(context);
+    }
+    @JavascriptInterface
+    public String getDeviceName(){
+        return Build.BRAND+"("+Build.MODEL+")";
+    }
+    @JavascriptInterface
+    public String getDeviceType(){
+        return context.getString(R.string.deviceType);
     }
     @JavascriptInterface
     public void qrScan(){

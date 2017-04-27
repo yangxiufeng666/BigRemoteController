@@ -1,6 +1,7 @@
 package com.ecc.bigdata.controller;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -66,6 +67,7 @@ public class ReportActivity extends AppCompatActivity {
                 .add("imei", Utils.getIMEI(ReportActivity.this))
                 .add("deviceType",getString(R.string.deviceType))
                 .add("phone",phoneNum)
+                .add("deviceName", Build.BRAND+"("+Build.MODEL+")")
                 .build());
         Call call = okHttpClient.newCall(builder.build());
         call.enqueue(new Callback() {
