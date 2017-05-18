@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.util.DisplayMetrics;
+import android.util.Log;
 
 import com.ecc.bigdata.controller.QRActivity;
 import com.ecc.bigdata.controller.R;
@@ -40,5 +42,21 @@ public class JSserver {
     public void qrScan(){
         Intent intent = new Intent(context, QRActivity.class);
         context.startActivityForResult(intent,QR_SCAN_CODE);
+    }
+    @JavascriptInterface
+    public float getXdpi(){
+        DisplayMetrics metric = new DisplayMetrics();
+        context.getWindowManager().getDefaultDisplay().getMetrics(metric);
+        float xdpi = metric.xdpi;
+        Log.e("metric", "  DisplayMetrics, xdpi=" + xdpi);
+        return xdpi;
+    }
+    @JavascriptInterface
+    public float getYdpi(){
+        DisplayMetrics metric = new DisplayMetrics();
+        context.getWindowManager().getDefaultDisplay().getMetrics(metric);
+        float ydpi = metric.ydpi;
+        Log.e("metric", "  DisplayMetrics,  ydpi=" + ydpi);
+        return ydpi;
     }
 }
