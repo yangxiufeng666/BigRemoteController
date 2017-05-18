@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">BigDataController</string>
+    <array name="static_resource">
+        <item>china.js</item>
+        <item>config.js</item>
+        <item>dark.js</item>
+        <item>echarts.js</item>
+        <item>echarts.min.js</item>
+        <item>esl.js</item>
+    </array>
 </resources>
