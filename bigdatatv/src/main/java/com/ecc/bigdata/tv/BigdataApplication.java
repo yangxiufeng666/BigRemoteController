@@ -2,6 +2,7 @@ package com.ecc.bigdata.tv;
 
 import android.app.Application;
 
+import com.ecc.bigdata.tv.util.DeviceUuidFactory;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 import com.tencent.bugly.crashreport.CrashReport;
@@ -16,6 +17,7 @@ public class BigdataApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        DeviceUuidFactory.buildUuidFactory(this);
         initLogger();
         /* Bugly SDK初始化
         * 参数1：上下文对象

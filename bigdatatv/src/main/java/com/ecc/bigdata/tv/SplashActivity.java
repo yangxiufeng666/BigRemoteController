@@ -23,6 +23,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.airbnb.lottie.LottieAnimationView;
 import com.ecc.bigdata.tv.entity.ResultBean;
+import com.ecc.bigdata.tv.util.DeviceUuidFactory;
 import com.ecc.bigdata.tv.util.OKHttpUtil;
 import com.ecc.bigdata.tv.util.Utils;
 import com.google.gson.Gson;
@@ -59,9 +60,7 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.READ_PHONE_STATE,
             Manifest.permission.ACCESS_WIFI_STATE,
-            Manifest.permission.ACCESS_NETWORK_STATE,
-            Manifest.permission.ACCESS_WIFI_STATE,
-//            Manifest.permission.READ_LOGS
+            Manifest.permission.ACCESS_NETWORK_STATE
     };
     @BindView(R.id.welcomeTxt)
     TextView welcomeTxt;
@@ -147,51 +146,54 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
 
     private void delayToMainActivity() {
         checkDeviceReport();
-//        final Animation anim = new AlphaAnimation(0, 1);
-//        anim.setDuration(3000);
-//        anim.setFillAfter(true);
-//        anim.setInterpolator(new LinearInterpolator());
-//        welcomeTxt.startAnimation(anim);
-//        lottieView.playAnimation();
-//        lottieView.addAnimatorListener(new Animator.AnimatorListener() {
-//            @Override
-//            public void onAnimationStart(Animator animation) {
-//
-//            }
-//
-//            @Override
-//            public void onAnimationEnd(Animator animation) {
-//                try {
-//                    countDownLatch.await();
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//                if (!isError){
-//                    handler.post(runnable);
-//                }
-//            }
-//
-//            @Override
-//            public void onAnimationCancel(Animator animation) {
-//
-//            }
-//
-//            @Override
-//            public void onAnimationRepeat(Animator animation) {
-//
-//            }
-//        });
+        final Animation anim = new AlphaAnimation(0, 1);
+        anim.setDuration(3000);
+        anim.setFillAfter(true);
+        anim.setInterpolator(new LinearInterpolator());
+        welcomeTxt.startAnimation(anim);
+        lottieView.playAnimation();
+        lottieView.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                try {
+                    countDownLatch.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (!isError){
+                    handler.post(runnable);
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
     }
 
     private void checkDeviceReport() {
         try {
             Log.e("XXX", Build.BRAND);
             Log.e("XXX", Build.MODEL);
+            Log.e("XXX", Utils.getUniquePsuedoID());
+            Log.e("XXX", DeviceUuidFactory.getDeviceUuid().toString());
+            String imei = DeviceUuidFactory.getDeviceUuid().toString();
             OkHttpClient okHttpClient = OKHttpUtil.getmInstance().getOKhttpClient();
             Request.Builder builder = new Request.Builder();
             builder.url(getResources().getString(R.string.domain_url)+"/report/checkReportDevice");
             builder.post(new FormBody.Builder()
-                    .add("imei", Utils.getIMEI(SplashActivity.this))
+                    .add("imei", imei)
                     .build());
             Call call = okHttpClient.newCall(builder.build());
             call.enqueue(new Callback() {

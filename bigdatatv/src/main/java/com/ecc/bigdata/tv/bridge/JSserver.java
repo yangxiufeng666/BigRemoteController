@@ -7,6 +7,7 @@ import android.util.Log;
 
 
 import com.ecc.bigdata.tv.R;
+import com.ecc.bigdata.tv.util.DeviceUuidFactory;
 import com.ecc.bigdata.tv.util.Utils;
 
 import org.xwalk.core.JavascriptInterface;
@@ -26,7 +27,8 @@ public class JSserver {
     }
     @JavascriptInterface
     public String getImei(){
-        return Utils.getIMEI(context);
+        String deviceUUID = DeviceUuidFactory.getDeviceUuid().toString();
+        return deviceUUID;
     }
     @JavascriptInterface
     public String getDeviceName(){

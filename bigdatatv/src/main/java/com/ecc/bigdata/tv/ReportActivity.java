@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.ecc.bigdata.tv.entity.ResultBean;
+import com.ecc.bigdata.tv.util.DeviceUuidFactory;
 import com.ecc.bigdata.tv.util.OKHttpUtil;
 import com.ecc.bigdata.tv.util.PhoneUtil;
 import com.ecc.bigdata.tv.util.Utils;
@@ -64,7 +65,7 @@ public class ReportActivity extends AppCompatActivity {
         Request.Builder builder = new Request.Builder();
         builder.url(getResources().getString(R.string.domain_url)+"/report/device");
         builder.post(new FormBody.Builder()
-                .add("imei", Utils.getIMEI(ReportActivity.this))
+                .add("imei", DeviceUuidFactory.getDeviceUuid().toString())
                 .add("deviceType",getString(R.string.deviceType))
                 .add("phone",phoneNum)
                 .add("deviceName", Build.BRAND+"("+Build.MODEL+")")
