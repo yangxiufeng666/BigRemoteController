@@ -2,6 +2,7 @@ package com.ecc.bigdata.controller;
 
 import android.app.Application;
 
+import com.ecc.bigdata.controller.util.DeviceUuidFactory;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 
@@ -15,6 +16,7 @@ public class BigdataApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        DeviceUuidFactory.buildUuidFactory(this);
         initLogger();
     }
     private void initLogger(){

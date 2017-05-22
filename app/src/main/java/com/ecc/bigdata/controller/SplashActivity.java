@@ -188,7 +188,7 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
         Request.Builder builder = new Request.Builder();
         builder.url(getResources().getString(R.string.domain_url)+"/report/checkReportDevice");
         builder.post(new FormBody.Builder()
-                .add("imei", Utils.getIMEI(SplashActivity.this))
+                .add("imei", Utils.getDeviceUUID(SplashActivity.this))
                 .build());
         Call call = okHttpClient.newCall(builder.build());
         call.enqueue(new Callback() {

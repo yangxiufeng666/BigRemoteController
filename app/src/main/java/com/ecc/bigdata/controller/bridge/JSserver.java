@@ -28,7 +28,7 @@ public class JSserver {
     }
     @JavascriptInterface
     public String getImei(){
-        return Utils.getIMEI(context);
+        return Utils.getDeviceUUID(context);
     }
     @JavascriptInterface
     public String getDeviceName(){

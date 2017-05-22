@@ -64,7 +64,7 @@ public class ReportActivity extends AppCompatActivity {
         Request.Builder builder = new Request.Builder();
         builder.url(getResources().getString(R.string.domain_url)+"/report/device");
         builder.post(new FormBody.Builder()
-                .add("imei", Utils.getIMEI(ReportActivity.this))
+                .add("imei", Utils.getDeviceUUID(ReportActivity.this))
                 .add("deviceType",getString(R.string.deviceType))
                 .add("phone",phoneNum)
                 .add("deviceName", Build.BRAND+"("+Build.MODEL+")")
