@@ -1,0 +1,61 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+
+    defaultConfig {
+        applicationId "com.ecc.bigdata.tv"
+        minSdkVersion 19
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        manifestPlaceholders = [
+                app_name:"彩云系统"
+        ]
+        resValue("string","domain_url","http://show.bigdata.gogbuy.com")
+        resValue("string","welcome_content","欢迎使用彩云系统")
+        resValue("string","deviceType","2")
+        ndk{
+            abiFilters "armeabi-v7a","armeabi"
+        }
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0'
+    testCompile 'junit:junit:4.12'
+    compile 'org.xwalk:xwalk_core_library:23.53.589.4'
+    compile 'pub.devrel:easypermissions:0.3.0'
+    compile 'com.jakewharton:butterknife:8.5.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+    compile 'com.airbnb.android:lottie:1.5.0'
+    compile 'com.squareup.okhttp3:okhttp:3.6.0'
+    compile 'com.google.code.gson:gson:2.7'
+    compile 'com.afollestad.material-dialogs:core:0.9.4.2'
+    compile 'com.orhanobut:logger:1.15'
+    compile 'com.tencent.bugly:crashreport:latest.release'
+}
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == 'com.android.support') {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion '25.3.0'
+            }
+        }
+    }
+}
