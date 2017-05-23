@@ -92,9 +92,6 @@ public class MainActivity extends AppCompatActivity {
         mSettings.setAllowFileAccess(true);
         mSettings.setDatabaseEnabled(true);
 
-        mSettings.setInitialPageScale(50);
-        mSettings.setLoadWithOverviewMode(true);
-
         xWalkView.addJavascriptInterface(new JSserver(this), "NativeInterface");
         //load url
         xWalkView.loadUrl(getResources().getString(R.string.domain_url)+"/screen/goScreen");
