@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
         mSettings.setCacheMode(XWalkSettingsInternal.LOAD_DEFAULT);
         mSettings.setUseWideViewPort(true);
         mSettings.setLoadWithOverviewMode(true);
+
         mSettings.setSupportSpatialNavigation(false);
         mSettings.setSupportMultipleWindows(false);
         mSettings.setSupportQuirksMode(false);
@@ -90,6 +91,9 @@ public class MainActivity extends AppCompatActivity {
         mSettings.setAllowUniversalAccessFromFileURLs(true);
         mSettings.setAllowFileAccess(true);
         mSettings.setDatabaseEnabled(true);
+
+        mSettings.setInitialPageScale(50);
+        mSettings.setLoadWithOverviewMode(true);
 
         xWalkView.addJavascriptInterface(new JSserver(this), "NativeInterface");
         //load url

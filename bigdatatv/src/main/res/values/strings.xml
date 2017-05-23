@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BigdataTv</string>
+    <string name="app_name">彩云系统</string>
     <array name="static_resource">
         <item>china.js</item>
         <item>config.js</item>

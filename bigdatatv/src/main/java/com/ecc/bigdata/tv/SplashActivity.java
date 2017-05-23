@@ -88,7 +88,7 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
         countDownLatch = new CountDownLatch(1);
         if (EasyPermissions.hasPermissions(this, needPermissions)) {
             Log.e(TAG, "已经获取权限");
-            Toast.makeText(this,"已经获取权限",Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this,"已经获取权限",Toast.LENGTH_SHORT).show();
             delayToMainActivity();
         } else {
             EasyPermissions.requestPermissions(this, "必要的权限", PERMISSON_REQUESTCODE, needPermissions);
@@ -128,12 +128,12 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
         Log.e(TAG, "onActivityResult requestCode = " + requestCode);
         if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE) {
             if (EasyPermissions.hasPermissions(this, needPermissions)) {
-                Toast.makeText(this, "应用已经取得相应的权限，马上进入主界面", Toast.LENGTH_SHORT)
-                        .show();
+//                Toast.makeText(this, "应用已经取得相应的权限，马上进入主界面", Toast.LENGTH_SHORT)
+//                        .show();
                 delayToMainActivity();
             } else {
-                Toast.makeText(this, "应用得不到相应的权限，即将退出", Toast.LENGTH_SHORT)
-                        .show();
+//                Toast.makeText(this, "应用得不到相应的权限，即将退出", Toast.LENGTH_SHORT)
+//                        .show();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
