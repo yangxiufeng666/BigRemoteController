@@ -183,11 +183,11 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
     }
 
     private void checkDeviceReport() {
+        DeviceUuidFactory.buildUuidFactory(this);
         try {
             Log.e("XXX", Build.BRAND);
             Log.e("XXX", Build.MODEL);
-            Log.e("XXX", Utils.getUniquePsuedoID());
-            Log.e("XXX", DeviceUuidFactory.getDeviceUuid().toString());
+            Log.e("XXX", Utils.getDeviceUUID(this));
             String imei = DeviceUuidFactory.getDeviceUuid().toString();
             OkHttpClient okHttpClient = OKHttpUtil.getmInstance().getOKhttpClient();
             Request.Builder builder = new Request.Builder();

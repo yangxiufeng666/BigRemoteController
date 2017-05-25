@@ -17,7 +17,6 @@ public class BigdataApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        DeviceUuidFactory.buildUuidFactory(this);
         initLogger();
         /* Bugly SDK初始化
         * 参数1：上下文对象

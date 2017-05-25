@@ -27,7 +27,7 @@ public class JSserver {
     }
     @JavascriptInterface
     public String getImei(){
-        String deviceUUID = DeviceUuidFactory.getDeviceUuid().toString();
+        String deviceUUID =Utils.getDeviceUUID(context);
         return deviceUUID;
     }
     @JavascriptInterface

@@ -40,6 +40,16 @@ public class Utils {
         String  mac = wm.getConnectionInfo().getMacAddress();
         return mac;
     }
+    public static String getDeviceUUID(Context context){
+        String uuid=null;
+        String imei = getIMEI(context);
+        if (isEmpty(imei)){
+            uuid = DeviceUuidFactory.getDeviceUuid().toString();
+        }else {
+            uuid = imei;
+        }
+        return uuid;
+    }
     public static String getUniquePsuedoID() {
         String m_szDevIDShort = "35" +
                 // 主板
