@@ -71,7 +71,7 @@
 -keep class **.R$* { *; }
 
 -keep  class  junit.framework.**{*;}
-#不混淆第三方包
+#不混淆第三方包,权限
 -dontwarn pub.devrel.easypermissions.**
 -keep class pub.devrel.easypermissions.**{*;}
 
@@ -98,3 +98,36 @@
 -keep interface org.chromium.**{*;}
 
 -keep class org.xwalk.core.** { *;}
+
+# okhttp
+-dontwarn okio.**
+-dontwarn okhttp3.**
+-dontwarn javax.annotation.Nullable
+-dontwarn javax.annotation.ParametersAreNonnullByDefault
+
+# lottie
+-dontwarn com.airbnb.lottie.**
+-keep class com.airbnb.lottie.**{*;}
+-keep interface com.airbnb.lottie.**{*;}
+
+#logger
+-dontwarn com.orhanobut.logger.**
+-keep class com.orhanobut.logger.**{*;}
+-keep interface com.orhanobut.logger.**{*;}
+
+#二维码
+-dontwarn cn.bingoogolapple.qrcode.core.**
+-keep class cn.bingoogolapple.qrcode.core.**{*;}
+-keep interface cn.bingoogolapple.qrcode.core.**{*;}
+
+-dontwarn cn.bingoogolapple.qrcode.zxing.**
+-keep class cn.bingoogolapple.qrcode.zxing.**{*;}
+-keep interface cn.bingoogolapple.qrcode.zxing.**{*;}
+
+-dontwarn com.google.zxing.**
+-keep class com.google.zxing.**{*;}
+-keep interface com.google.zxing.**{*;}
+#
+-dontwarn com.tencent.bugly.**
+-keep class com.tencent.bugly.**{*;}
+-keep interface com.tencent.bugly.**{*;}
