@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BigDataController.iml" filepath="$PROJECT_DIR$/BigDataController.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bigdatatv/bigdatatv.iml" filepath="$PROJECT_DIR$/bigdatatv/bigdatatv.iml" />
     </modules>
   </component>
 </project>

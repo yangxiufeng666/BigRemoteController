@@ -33,6 +33,42 @@ android {
             abiFilters "armeabi-v7a","armeabi"
         }
     }
+    productFlavors {
+        controller_config {
+            minSdkVersion 19
+            applicationId 'com.ecc.bigdata.remote'
+            signingConfig signingConfigs.config
+            targetSdkVersion 25
+            versionCode 1
+            versionName '1.0'
+            manifestPlaceholders = [
+                    app_name:"彩云遥控器"
+            ]
+            resValue("string","domain_url","http://show.bigdata.gogbuy.com")
+            resValue("string","welcome_content","欢迎使用彩云遥控器")
+            resValue("string","deviceType","1")
+            ndk{
+                abiFilters "armeabi-v7a","armeabi"
+            }
+        }
+        TV_config {
+            minSdkVersion 19
+            applicationId 'com.ecc.bigdata.tv'
+            signingConfig signingConfigs.config
+            targetSdkVersion 25
+            versionCode 1
+            versionName '1.0'
+            manifestPlaceholders = [
+                    app_name:"彩云系统"
+            ]
+            resValue("string","domain_url","http://show.bigdata.gogbuy.com")
+            resValue("string","welcome_content","欢迎使用彩云系统")
+            resValue("string","deviceType","2")
+            ndk{
+                abiFilters "armeabi-v7a","armeabi"
+            }
+        }
+    }
     buildTypes {
         release {
             minifyEnabled true
