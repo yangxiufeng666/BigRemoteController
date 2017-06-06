@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements JSserver.ClearCache{
 
     @BindView(R.id.xWalkView)
     XWalkView xWalkView;
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         mSettings.setAllowFileAccess(true);
         mSettings.setDatabaseEnabled(true);
 
-        xWalkView.addJavascriptInterface(new JSserver(this), "NativeInterface");
+        xWalkView.addJavascriptInterface(new JSserver(this,this), "NativeInterface");
         //load url
         if ("1".equals(getResources().getString(R.string.deviceType))){
             xWalkView.loadUrl(getResources().getString(R.string.domain_url));
@@ -100,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
         }
 //        xWalkView.loadUrl("file:///android_asset/testJs.html");
     }
-
     @Override
     protected void onResume() {
         if (xWalkView != null) {
@@ -186,5 +185,9 @@ public class MainActivity extends AppCompatActivity {
             //调用JS，把信息给页面
             xWalkView.loadUrl("javascript:show('"+result+"')");
         }
+    }
+    @Override
+    public void clearCache() {
+        xWalkView.clearCache(true);
     }
 }

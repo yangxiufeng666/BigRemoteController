@@ -22,10 +22,21 @@ import org.xwalk.core.JavascriptInterface;
 public class JSserver {
     public static final int QR_SCAN_CODE = 10001;
     private Activity context;
+    private ClearCache clearCache;
+
+    public interface ClearCache{
+        void clearCache();
+    }
 
     public JSserver(Activity context) {
-        this.context = context;
+        this(context,null);
     }
+
+    public JSserver(Activity context, ClearCache clearCache) {
+        this.context = context;
+        this.clearCache = clearCache;
+    }
+
     @JavascriptInterface
     public String getImei(){
         return Utils.getDeviceUUID(context);
@@ -58,5 +69,11 @@ public class JSserver {
         float ydpi = metric.ydpi;
         Log.e("metric", "  DisplayMetrics,  ydpi=" + ydpi);
         return ydpi;
+    }
+    @JavascriptInterface
+    public void ClearCache(){
+        if (clearCache != null){
+            clearCache.clearCache();
+        }
     }
 }
