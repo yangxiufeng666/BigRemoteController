@@ -25,6 +25,7 @@ import com.ecc.bigdata.controller.entity.ResultBean;
 import com.ecc.bigdata.controller.util.OKHttpUtil;
 import com.ecc.bigdata.controller.util.Utils;
 import com.google.gson.Gson;
+import com.orhanobut.logger.Logger;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -64,8 +65,6 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
             Manifest.permission.CAMERA,
             Manifest.permission.VIBRATE
     };
-    @BindView(R.id.welcomeTxt)
-    TextView welcomeTxt;
     @BindView(R.id.lottieView)
     LottieAnimationView lottieView;
 
@@ -86,7 +85,6 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_layout);
         ButterKnife.bind(this);
-        welcomeTxt.setText(getString(R.string.welcome_content));
         countDownLatch = new CountDownLatch(1);
         if (EasyPermissions.hasPermissions(this, needPermissions)) {
             Log.e(TAG, "已经获取权限");
@@ -145,11 +143,6 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
 
     private void delayToMainActivity() {
         checkDeviceReport();
-        final Animation anim = new AlphaAnimation(0, 1);
-        anim.setDuration(3000);
-        anim.setFillAfter(true);
-        anim.setInterpolator(new LinearInterpolator());
-        welcomeTxt.startAnimation(anim);
         lottieView.playAnimation();
         lottieView.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
@@ -165,7 +158,7 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
                     e.printStackTrace();
                 }
                 if (!isError){
-                    handler.post(runnable);
+                    handler.postDelayed(runnable,300);
                 }
             }
 
@@ -182,13 +175,15 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
     }
 
     private void checkDeviceReport() {
-        Log.e("XXX", Build.BRAND);
-        Log.e("XXX", Build.MODEL);
+        Logger.e(Build.BRAND);
+        Logger.e(Build.MODEL);
         OkHttpClient okHttpClient = OKHttpUtil.getmInstance().getOKhttpClient();
         Request.Builder builder = new Request.Builder();
         builder.url(getResources().getString(R.string.domain_url)+"/report/checkReportDevice");
+        String imei = Utils.getDeviceUUID(SplashActivity.this);
+        Logger.i("imei="+imei);
         builder.post(new FormBody.Builder()
-                .add("imei", Utils.getDeviceUUID(SplashActivity.this))
+                .add("imei", imei)
                 .build());
         Call call = okHttpClient.newCall(builder.build());
         call.enqueue(new Callback() {
